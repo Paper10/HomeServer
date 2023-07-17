@@ -1,56 +1,61 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>JSZip Example</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
-  <script>
-    // zip 파일 로드 및 이미지 파일 보여주기
-    async function loadZipFile() {
-      const response = await fetch('cartoon.zip');
-      const blob = await response.blob();
-      const zip = await JSZip.loadAsync(blob);
-      const imageNames = Object.keys(zip.files).filter(name => name.match(/\.(jpg|jpeg|png|gif)$/i));
-      const imageContainer = document.getElementById('image-container');
-      for (const imageName of imageNames) {
-        const imageData = await zip.files[imageName].async('blob');
-        const imageUrl = URL.createObjectURL(imageData);
-        const img = document.createElement('img');
-        img.src = imageUrl;
-        imageContainer.appendChild(img);
+<html lang="ko">
+  <head>
+    <title>Media Viewer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 부트스트랩 CDN 링크 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Swiper 라이브러리 스타일시트 -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <!-- 추가된 스타일 -->
+    <style>
+      .swiper-slide {
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
-    }
-
-    // 이전 이미지 보기
-    function prevImage() {
-      const imageContainer = document.getElementById('image-container');
-      const currentImage = imageContainer.querySelector('img:not(.hidden)');
-      const prevImage = currentImage.previousSibling;
-      if (prevImage) {
-        currentImage.classList.add('hidden');
-        prevImage.classList.remove('hidden');
-      }
-    }
-
-    // 다음 이미지 보기
-    function nextImage() {
-      const imageContainer = document.getElementById('image-container');
-      const currentImage = imageContainer.querySelector('img:not(.hidden)');
-      const nextImage = currentImage.nextSibling;
-      if (nextImage) {
-        currentImage.classList.add('hidden');
-        nextImage.classList.remove('hidden');
-      }
-    }
-  </script>
-  <style>
-    .hidden {
-      display: none;
-    }
-  </style>
-</head>
-<body onload="loadZipFile()">
-  <button onclick="prevImage()">이전</button>
-  <button onclick="nextImage()">다음</button>
-  <div id="image-container"></div>
-</body>
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">Media Viewer</a>
+    </nav>
+    <div class="container my-5">
+      <!-- 이미지 표시 영역 -->
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+          <% images.forEach(function(image) { %>
+            <div class="swiper-slide">
+              <img src="data:image/jpeg;base64, <%= image.data %>" alt="<%= image.name %>">
+              <div class="carousel-caption">
+                <h5><%= image.name %></h5>
+              </div>
+            </div>
+          <% }); %>
+        </div>
+        <!-- 페이징 네비게이션 -->
+        <div class="swiper-pagination"></div>
+      </div>
+    </div>
+    <!-- 부트스트랩 JS CDN 링크 -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- Swiper 라이브러리 스크립트 -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <!-- 추가된 스크립트 -->
+    <script>
+      var swiper = new Swiper('.swiper-container', {
+        direction: 'vertical',
+        slidesPerView: 1,
+        spaceBetween: 30,
+        mousewheel: true,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+        },
+      });
+    </script>
+  </body>
 </html>

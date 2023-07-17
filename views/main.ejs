@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
   <head>
-    <title>Video List</title>
+    <title>Media List</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- 부트스트랩 CDN 링크 -->
@@ -9,14 +9,28 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">Video List</a>
+      <a class="navbar-brand" href="#">Media List</a>
     </nav>
     <div class="container my-5">
+      <h3>Video List</h3>
       <ul class="list-group">
-        <% videolist.forEach(function(video) { %>
-        <li class="list-group-item">
-          <a href="/view/<%= video %>"><%= video %></a>
-        </li>
+        <% medialist.forEach(function(media) { %>
+          <% if (media.endsWith('.mp4')) { %>
+            <li class="list-group-item">
+              <a href="/view/<%= media %>"><%= media %></a>
+            </li>
+          <% } %>
+        <% }); %>
+      </ul>
+      <hr>
+      <h3>Zip File List</h3>
+      <ul class="list-group">
+        <% medialist.forEach(function(media) { %>
+          <% if (media.endsWith('.zip')) { %>
+            <li class="list-group-item">
+              <a href="/openzip/<%= media %>"><%= media %></a>
+            </li>
+          <% } %>
         <% }); %>
       </ul>
     </div>
@@ -26,15 +40,3 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   </body>
 </html>
-
-
-<!--
-<body>
-  <h1>Video List</h1>
-  <ul>
-    <% videolist.forEach(function(video) { %>
-      <li><a href="/view/<%= video %>"><%= video %></a></li>
-    <% }); %>
-  </ul>
-</body>
--->

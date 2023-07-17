@@ -20,16 +20,8 @@ fetch('https://api64.ipify.org/?format=json')
   
 app.get('/', (req,res) => {
   var files = fs.readdirSync(directory);
-  var filelist = [];
-  for(var i =0; i < files.length; i++){
-    var file = files[i];
-    var suffix = file.substr(file.length - 4, file.length);
-    if(suffix == '.mp4'){
-      filelist.push(file)
-    }
-  }
   res.render('main', {
-    videolist: filelist
+    medialist: files
   })
 })
 
@@ -79,4 +71,36 @@ app.get('/video/:fileName', (req, res) => {
     fs.createReadStream(fullPath).pipe(res)
   }
 })
+
+app.get('/openzip/:filename', (req, res) => {
+  const filename = req.params.filename;
+  const zipFilePath = path.join(directory, filename);
+
+  // Code to extract and display images from the zip file
+  // Replace with your implementation
+
+  // Example code using 'adm-zip' library:
+  const AdmZip = require('adm-zip');
+  const zip = new AdmZip(zipFilePath);
+  const zipEntries = zip.getEntries();
+
+  const images = [];
+  for (const zipEntry of zipEntries) {
+    if (!zipEntry.isDirectory) {
+      if (zipEntry.entryName.match(/\.(jpg|jpeg|png|gif)$/i)) {
+        const imageData = zip.readFile(zipEntry.entryName);
+        const base64Image = Buffer.from(imageData).toString('base64');
+        images.push({
+          name: zipEntry.entryName,
+          data: base64Image
+        });
+      }
+    }
+  }
+
+  res.render('photos', {
+    images: images
+  });
+});
+
 app.listen(port)
