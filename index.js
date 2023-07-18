@@ -76,10 +76,7 @@ app.get('/openzip/:filename', (req, res) => {
   const filename = req.params.filename;
   const zipFilePath = path.join(directory, filename);
 
-  // Code to extract and display images from the zip file
-  // Replace with your implementation
-
-  // Example code using 'adm-zip' library:
+  // 'adm-zip' library:
   const AdmZip = require('adm-zip');
   const zip = new AdmZip(zipFilePath);
   const zipEntries = zip.getEntries();
@@ -99,6 +96,7 @@ app.get('/openzip/:filename', (req, res) => {
   }
 
   res.render('photos', {
+    title: req.params.filename,
     images: images
   });
 });
