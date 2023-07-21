@@ -6,11 +6,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- 부트스트랩 CDN 링크 -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Open Sans", sans-serif;
+        background-color: #212121;
+        color: #fff;
+      }
+      header {
+        background-color: #363636;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      h1 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+      a {
+        text-decoration: none;
+        color: #000;
+        font-size: 1rem;
+        font-weight: 500;
+        margin-right: 1rem;
+        transition: all 0.2s ease-in-out;
+      }
+      a:hover {
+        color: #b8b8b8;
+      }
+      
+      button {
+        background-color: #fff; /* 원하는 배경색으로 변경 */
+        color: #111; /* 원하는 텍스트 색상으로 변경 */
+        font-size: 15px; /* 원하는 폰트 크기로 변경 */
+        width: 100px; /* 원하는 너비로 변경 */
+        height: 30px; /* 원하는 높이로 변경 */
+        border-radius: 10px; /* 원하는 버튼 모양으로 변경 */
+        margin-right: 10px; /* 원하는 오른쪽 여백으로 변경 */
+        border-color: #fff; /* 원하는 테두리 색상으로 변경 */
+      }
+
+      input{
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+      small{
+        color: #ff0000;
+      }
+
+    </style>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">Media List</a>
-    </nav>
+    <header>
+      <h1>Media List - <%= dir %></h1>
+    </header>
     <div class="container my-5">
       <h3>Video List</h3>
       <ul class="list-group">
@@ -34,9 +87,26 @@
         <% }); %>
       </ul>
     </div>
+    <div class="container my-5">
+      <input type="text" id="inputText" placeholder="폴더 경로 입력 ex)C:\Users\Korea\Desktop\Folder\media">
+      <button id="submitButton">폴더 변경</button>
+      <small><%= error %></small>
+    </div>
     <!-- 부트스트랩 JS CDN 링크 -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      document.getElementById('submitButton').addEventListener('click', function() {
+        const inputValue = document.getElementById('inputText').value;
+        const requestUrl = '/changedir/' + encodeURIComponent(inputValue);
+    
+        fetch(requestUrl, { method: 'GET' })
+        .then(data => {
+          location.reload()
+        });
+      });
+    </script>
   </body>
 </html>

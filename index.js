@@ -10,6 +10,7 @@ const directory_data = fs.readFileSync('directory', 'utf-8');
 let directory = directory_data.trim();
 const port_data = fs.readFileSync('port', 'utf-8');
 let port = parseInt(port_data);
+let errormessage = ""
 
 console.log(`Directory : ${directory}`);
 console.log(`Port : ${port}`);
@@ -21,8 +22,23 @@ fetch('https://api64.ipify.org/?format=json')
 app.get('/', (req,res) => {
   var files = fs.readdirSync(directory);
   res.render('main', {
-    medialist: files
+    dir: directory,
+    medialist: files,
+    error: errormessage
   })
+  errormessage = ""
+})
+
+app.get('/changedir/:dirname', (req,res) => {
+  const { dirname } = req.params
+  try{
+    var files = fs.readdirSync(dirname)
+    fs.writeFileSync('directory', dirname)
+    directory = dirname
+  } catch (err){
+    errormessage = dirname + " is not valid Folder name."
+  }
+  res.write("OK")
 })
 
 app.get('/view/:fileName', (req, res) => {
